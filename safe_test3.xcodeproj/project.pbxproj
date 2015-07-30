@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		102D0FFB1B69173500A8C2B9 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 102D0FFA1B69173500A8C2B9 /* libsqlite3.dylib */; };
+		109CC7381B6A147C00057EDF /* EventModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 109CC7371B6A147C00057EDF /* EventModel.m */; };
+		109CC73B1B6A1A0600057EDF /* SqlHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 109CC73A1B6A1A0600057EDF /* SqlHelper.m */; };
 		C03BDCA91B676187009495C0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C03BDCA81B676187009495C0 /* main.m */; };
 		C03BDCAC1B676187009495C0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C03BDCAB1B676187009495C0 /* AppDelegate.m */; };
 		C03BDCB21B676187009495C0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C03BDCB01B676187009495C0 /* Main.storyboard */; };
@@ -31,6 +34,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		102D0FFA1B69173500A8C2B9 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		109CC7361B6A147C00057EDF /* EventModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventModel.h; sourceTree = "<group>"; };
+		109CC7371B6A147C00057EDF /* EventModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventModel.m; sourceTree = "<group>"; };
+		109CC7391B6A1A0600057EDF /* SqlHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SqlHelper.h; sourceTree = "<group>"; };
+		109CC73A1B6A1A0600057EDF /* SqlHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SqlHelper.m; sourceTree = "<group>"; };
 		C03BDCA31B676187009495C0 /* safe_test3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = safe_test3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C03BDCA71B676187009495C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C03BDCA81B676187009495C0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -57,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				102D0FFB1B69173500A8C2B9 /* libsqlite3.dylib in Frameworks */,
 				C0D2ACA11B687A170009EBA5 /* AddressBook.framework in Frameworks */,
 				C0D2ACA21B687A170009EBA5 /* AddressBookUI.framework in Frameworks */,
 			);
@@ -72,9 +81,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		109CC7351B6A145E00057EDF /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				109CC7361B6A147C00057EDF /* EventModel.h */,
+				109CC7371B6A147C00057EDF /* EventModel.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		C03BDC9A1B676187009495C0 = {
 			isa = PBXGroup;
 			children = (
+				102D0FFA1B69173500A8C2B9 /* libsqlite3.dylib */,
 				C0D2AC9F1B687A170009EBA5 /* AddressBook.framework */,
 				C0D2ACA01B687A170009EBA5 /* AddressBookUI.framework */,
 				C03BDCA51B676187009495C0 /* safe_test3 */,
@@ -95,6 +114,7 @@
 		C03BDCA51B676187009495C0 /* safe_test3 */ = {
 			isa = PBXGroup;
 			children = (
+				109CC7351B6A145E00057EDF /* Model */,
 				C06110261B68D2DF006A57D7 /* Person.m */,
 				C06110281B68D547006A57D7 /* Person.h */,
 				C03BDCAA1B676187009495C0 /* AppDelegate.h */,
@@ -107,6 +127,8 @@
 				C03BDCA61B676187009495C0 /* Supporting Files */,
 				C0D2AC9C1B6871E60009EBA5 /* AddEvent.h */,
 				C0D2AC9D1B6871E60009EBA5 /* AddEvent.m */,
+				109CC7391B6A1A0600057EDF /* SqlHelper.h */,
+				109CC73A1B6A1A0600057EDF /* SqlHelper.m */,
 			);
 			path = safe_test3;
 			sourceTree = "<group>";
@@ -242,6 +264,8 @@
 				C06110271B68D2DF006A57D7 /* Person.m in Sources */,
 				C03BDCAC1B676187009495C0 /* AppDelegate.m in Sources */,
 				C03BDCA91B676187009495C0 /* main.m in Sources */,
+				109CC73B1B6A1A0600057EDF /* SqlHelper.m in Sources */,
+				109CC7381B6A147C00057EDF /* EventModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

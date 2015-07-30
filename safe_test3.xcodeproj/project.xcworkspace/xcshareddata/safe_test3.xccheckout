@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>9BEFB26D-D3ED-4C55-8731-F95DEA247257</string>
 	<key>IDESourceControlProjectName</key>
-	<string>safe_test3</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>49190F8773AC0EC43F1AC93ADD03EC962AE03159</key>
 		<string>github.com:she5206/safe.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>safe_test3.xcodeproj</string>
+	<string>safe_test3.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>49190F8773AC0EC43F1AC93ADD03EC962AE03159</key>
