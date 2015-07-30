@@ -12,10 +12,10 @@
 #import "EventModel.h"
 #import "SqlHelper.h"
 #import "AddContact.h"
+#import "EventList.h"
+
 @interface AddEvent()
 
-+ (sqlite3 *)database;
-+ (void)setDatabase :(sqlite3 *)newDatabase;
 
 @property (strong, nonatomic) IBOutlet UITextField *event_title;
 @property (strong, nonatomic) IBOutlet UITextField *date;
@@ -50,8 +50,28 @@
     self.eventTime = [[NSDate alloc]init];
     self.phoneNumbers = [[NSMutableDictionary alloc]init];
     self.updateFrequency = 0;
+    
+    [self.event_title addTarget:self action:@selector(textFieldsDidChange) forControlEvents:UIControlEventEditingDidEnd];
+    [self.date addTarget:self action:@selector(textFieldsDidChange) forControlEvents:UIControlEventEditingDidEnd];
+    [self textFieldsDidChange];
+    
+    //self.delegate = [self parentViewController];
+    
 }
 
+-(void) textFieldsDidChange{
+   self.navigationItem.rightBarButtonItem.enabled = YES;
+    if([self.event_title.text isEqualToString:@""]){
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
+    if([self.date.text isEqualToString:@""])
+    {
+         self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
+    if([self.phoneNumbers count] ==0){
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
+}
 -(void) transition{
     NSLog(@"Onclick");
     AddContact * ac = [[AddContact alloc] initWithContacts:self.phoneNumbers];
@@ -62,6 +82,7 @@
 -(void) childViewController:(AddContact *)viewController updatePhoneNumbers:(NSMutableDictionary *)phones{
     NSLog(@"Test Delegate");
     self.phoneNumbers = phones;
+    [self textFieldsDidChange];
     [self.navigationController popViewControllerAnimated:YES];
 }
 -(void) ShowSelectedDate{
@@ -91,41 +112,19 @@
     
 }
 
-- (IBAction)onFindBtn:(UIButton *)sender {
 
-    // delete example
-//    SqlHelper *helper =[[SqlHelper alloc] init];
-//    [helper createDB];
-//    [helper removeEvent:6];
-    
-    // select example
-//    SqlHelper *helper =[[SqlHelper alloc] init];
-//    [helper createDB];
-//    EventModel *event = [helper selectEvent:1];
-//    NSLog(@"%@", event.title);
-    
-    // select all example
-//    SqlHelper *helper = [[SqlHelper alloc] init];
-//    [helper createDB];
-//    [helper selectAllEvent];
-}
-
-- (IBAction)onButntest:(UIButton *)sender {
-
-    // insert example
+-(IBAction) onSaveEvent:(UIBarButtonItem *)sender{
     EventModel *event = [[EventModel alloc]init];
     event.title=self.event_title.text;
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     [format setDateFormat:@"yyyy/MM/dd hh:mm"];
     [format setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];
     event.alarmTime = [format dateFromString:self.date.text];
-
     SqlHelper *helper = [[SqlHelper alloc] init];
     [helper createDB];
-    [helper insertEvent:event];
-    
+    [helper insertEvent:event withContacts:_phoneNumbers];
+    [self.delegate EventListViewController: self];
+    //[self.navigationController popViewControllerAnimated:YES];
 }
-
-
 
 @end

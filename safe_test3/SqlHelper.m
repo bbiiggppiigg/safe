@@ -7,6 +7,9 @@
 //
 
 #import "SqlHelper.h"
+#import "Person.h"
+
+
 
 @implementation SqlHelper
 
@@ -22,17 +25,31 @@
     _databasePath = [[NSString alloc] initWithString:[docsDir stringByAppendingPathComponent:@"myEvents.db"]];
     
     NSFileManager *filemgr = [NSFileManager defaultManager];
-    
     if([filemgr fileExistsAtPath:_databasePath] == NO){
         const char *dbpath = [_databasePath UTF8String];
         
         if(sqlite3_open(dbpath, &_DB) == SQLITE_OK){
             char *errorMessage;
-            const char *sql_statement = "CREATE TABLE IF NOT EXISTS events (ID INTEGER PRIMARY KEY AUTOINCREMENT, TITLE TEXT, TIME TEXT, FREQ TEXT)";
+            const char *create_event_table_sql = "CREATE TABLE IF NOT EXISTS events (ID INTEGER PRIMARY KEY AUTOINCREMENT, TITLE TEXT, TIME TEXT)";
+            const char *create_person_table_sql = "CREATE TABLE IF NOT EXISTS person (PID INTEGER PRIMARY KEY , FIRST_NAME TEXT , LAST_NAME TEXT)";
+            const char *create_phone_table_sql = "CREATE TABLE IF NOT EXISTS phone (PID INTEGER, PHONE_NUMBER TEXT)";
+            const char * create_eid_pid_table_sql = "CREATE TABLE IF NOT EXISTS eid_pid(EID INTEGER , PID INTEGER)";
         
-            if(sqlite3_exec(_DB, sql_statement, NULL, NULL, &errorMessage) != SQLITE_OK){
+            if(sqlite3_exec(_DB, create_event_table_sql, NULL, NULL, &errorMessage) != SQLITE_OK){
                 //[self showUIAlertWithMessage:@"Failed to create the table" andTitle:@"Error"];
-                NSLog(@"Failed to create the table");
+                NSLog(@"Failed to create the table event");
+            }
+            if(sqlite3_exec(_DB, create_person_table_sql, NULL, NULL, &errorMessage) != SQLITE_OK){
+                //[self showUIAlertWithMessage:@"Failed to create the table" andTitle:@"Error"];
+                NSLog(@"Failed to create the table person");
+            }
+            if(sqlite3_exec(_DB, create_phone_table_sql, NULL, NULL, &errorMessage) != SQLITE_OK){
+                //[self showUIAlertWithMessage:@"Failed to create the table" andTitle:@"Error"];
+                NSLog(@"Failed to create the table phone");
+            }
+            if(sqlite3_exec(_DB, create_eid_pid_table_sql, NULL, NULL, &errorMessage) != SQLITE_OK){
+                //[self showUIAlertWithMessage:@"Failed to create the table" andTitle:@"Error"];
+                NSLog(@"Failed to create the table phone");
             }
             sqlite3_close(_DB);
         }
@@ -43,29 +60,52 @@
     }
 }
 
-
-
--(void) insertEvent:(EventModel *)event{
+-(int) executeSQLStatement : (NSString *) query{
     sqlite3_stmt *statement;
     const char *dbpath = [_databasePath UTF8String];
-    
     if(sqlite3_open(dbpath, &_DB) == SQLITE_OK){
-        NSString *insertSQL = [NSString stringWithFormat:@"INSERT INTO events (title, time, freq) VALUES (\"%@\", \"%@\", \"%d\")", event.title, event.alarmTime, 1];
-        
-        const char *insert_statement = [insertSQL UTF8String];
-        sqlite3_prepare_v2(_DB, insert_statement, -1, &statement, NULL);
-        
+        const char *sql_statement = [query UTF8String];
+        sqlite3_prepare_v2(_DB, sql_statement, -1, &statement, NULL);
         if(sqlite3_step(statement) == SQLITE_DONE){
             //[self showUIAlertWithMessage:@"Event added to the database Successful" andTitle:@"Message"];
-            NSLog(@"Event added to the database Successful");
+            NSLog(@"Query Success %@",query);
         }
         else{
             //[self showUIAlertWithMessage:@"Failed to add the event" andTitle:@"Error"];
-            NSLog(@"Failed to add the event");
+            NSLog(@"Query Failed %@",query);
+            NSLog(@"%s",sqlite3_errmsg(_DB));
+            return -1;
         }
+        int eid = sqlite3_last_insert_rowid(_DB);
         sqlite3_finalize(statement);
         sqlite3_close(_DB);
+        return eid;
     }
+    return -1;
+    
+}
+
+-(void) insertEvent:(EventModel *)event withContacts:(NSMutableDictionary *)contacts{
+
+    NSString *insertSQL = [NSString stringWithFormat:@"INSERT INTO events (title, time) VALUES (\"%@\", \"%@\")", event.title, event.alarmTime];
+        
+    int eid = [self executeSQLStatement:insertSQL];
+    
+    for (id key in contacts){
+        Person * p = [contacts objectForKey:key];
+        int pid = (int) key;
+        NSString * insertPersonSQL = [NSString stringWithFormat: @"INSERT or IGNORE INTO person (pid, first_name, last_name) values (\"%d\",\"%@\",\"%@\")", pid, p.firstName, p.lastName];
+        [self executeSQLStatement:insertPersonSQL];
+        for(NSString * numbers in p.phoneNumbers){
+            NSString * insertPhoneSQL = [NSString stringWithFormat:@"INSERT or IGNORE INTO phone (pid, phone_number ) values (\"%d\",\"%@\")" , pid,numbers];
+            [self executeSQLStatement:insertPhoneSQL];
+        }
+        NSString * insertEidPidSQL = [NSString stringWithFormat:@"INSERT or IGNORE INTO eid_pid (eid,pid) values(\"%d\",\"%d\")",eid,pid];
+        [self executeSQLStatement:insertEidPidSQL];
+        
+    }
+
+    
 }
 -(EventModel *) selectEvent:(int)event_id{
     EventModel *result = [[EventModel alloc] init];
@@ -107,13 +147,13 @@
 }
 
 -(NSArray *) selectAllEvent{
-    
+    NSLog(@"select all events");
     NSMutableArray *returnData = [NSMutableArray new];
     
     sqlite3_stmt *statement;
     const char *dbpath = [_databasePath UTF8String];
     if(sqlite3_open(dbpath, &_DB) == SQLITE_OK){
-        NSString *querySQL = [NSString stringWithFormat:@"SELECT id, title, time, freq FROM events"];
+        NSString *querySQL = [NSString stringWithFormat:@"SELECT id, title, time FROM events order by time asc"];
         const char *query_statement = [querySQL UTF8String];
         
         if(sqlite3_prepare_v2(_DB, query_statement, -1, &statement, NULL) == SQLITE_OK){
@@ -122,9 +162,8 @@
                 
                 char *title = (char *) sqlite3_column_text(statement, 1);
                 char *time = (char *) sqlite3_column_text(statement, 2);
-                char *freq = (char *) sqlite3_column_text(statement, 3);
                 NSString *stime = [[NSString alloc] initWithUTF8String:time];
-                NSString *sfreq = [[NSString alloc] initWithUTF8String:freq];
+
                 
                 event.ID = sqlite3_column_int(statement, 0);
                 event.title = [[NSString alloc] initWithUTF8String:title];
@@ -139,7 +178,7 @@
             sqlite3_finalize(statement);
         }else{
             //[self showUIAlertWithMessage:@"Failed to search the database" andTitle:@"Error"];
-            NSLog(@"Failed to search the database");
+            NSLog(@"Failed to search the database %s",sqlite3_errmsg(_DB));
         }
         sqlite3_close(_DB);
     }

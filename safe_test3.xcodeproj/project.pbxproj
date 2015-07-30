@@ -16,6 +16,7 @@
 		C03BDCB41B676187009495C0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C03BDCB31B676187009495C0 /* Images.xcassets */; };
 		C03BDCB71B676187009495C0 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C03BDCB51B676187009495C0 /* LaunchScreen.xib */; };
 		C03BDCC31B676187009495C0 /* safe_test3Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = C03BDCC21B676187009495C0 /* safe_test3Tests.m */; };
+		C053A0F31B6A565100089C0C /* EventList.m in Sources */ = {isa = PBXBuildFile; fileRef = C053A0F21B6A565100089C0C /* EventList.m */; };
 		C06110211B68A00E006A57D7 /* AddContact.m in Sources */ = {isa = PBXBuildFile; fileRef = C06110201B68A00E006A57D7 /* AddContact.m */; };
 		C06110271B68D2DF006A57D7 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = C06110261B68D2DF006A57D7 /* Person.m */; };
 		C0D2AC9E1B6871E60009EBA5 /* AddEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = C0D2AC9D1B6871E60009EBA5 /* AddEvent.m */; };
@@ -50,6 +51,8 @@
 		C03BDCBC1B676187009495C0 /* safe_test3Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = safe_test3Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C03BDCC11B676187009495C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C03BDCC21B676187009495C0 /* safe_test3Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = safe_test3Tests.m; sourceTree = "<group>"; };
+		C053A0F11B6A565100089C0C /* EventList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventList.h; sourceTree = "<group>"; };
+		C053A0F21B6A565100089C0C /* EventList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventList.m; sourceTree = "<group>"; };
 		C061101F1B68A00E006A57D7 /* AddContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContact.h; sourceTree = "<group>"; };
 		C06110201B68A00E006A57D7 /* AddContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContact.m; sourceTree = "<group>"; };
 		C06110261B68D2DF006A57D7 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Person.m; path = ../Person.m; sourceTree = "<group>"; };
@@ -129,6 +132,8 @@
 				C0D2AC9D1B6871E60009EBA5 /* AddEvent.m */,
 				109CC7391B6A1A0600057EDF /* SqlHelper.h */,
 				109CC73A1B6A1A0600057EDF /* SqlHelper.m */,
+				C053A0F11B6A565100089C0C /* EventList.h */,
+				C053A0F21B6A565100089C0C /* EventList.m */,
 			);
 			path = safe_test3;
 			sourceTree = "<group>";
@@ -263,6 +268,7 @@
 				C0D2AC9E1B6871E60009EBA5 /* AddEvent.m in Sources */,
 				C06110271B68D2DF006A57D7 /* Person.m in Sources */,
 				C03BDCAC1B676187009495C0 /* AppDelegate.m in Sources */,
+				C053A0F31B6A565100089C0C /* EventList.m in Sources */,
 				C03BDCA91B676187009495C0 /* main.m in Sources */,
 				109CC73B1B6A1A0600057EDF /* SqlHelper.m in Sources */,
 				109CC7381B6A147C00057EDF /* EventModel.m in Sources */,

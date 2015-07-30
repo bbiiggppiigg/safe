@@ -10,6 +10,10 @@
 #import <sqlite3.h>
 #import "AddContact.h"
 
+
+
+@protocol AddEventDelegate;
+
 @interface AddEvent : UITableViewController <UITableViewDelegate,AddContactDelegate>
 {
     UIDatePicker * datePicker;
@@ -20,5 +24,9 @@
 @property NSDate * eventTime;
 @property NSMutableDictionary * phoneNumbers;
 @property NSInteger * updateFrequency;
+@property (nonatomic,weak) id<AddEventDelegate> delegate;
 
+@end
+@protocol AddEventDelegate <NSObject>
+-(void)EventListViewController: (AddEvent * ) viewController;
 @end
