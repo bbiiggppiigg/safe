@@ -53,10 +53,10 @@
                 }
                 NSLog(@"=========================");
             }
-            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://smsserviceapi.azurewebsites.net/SendSMS?to=886905303061&msg=lat:%f,lon:%f&key=abcde",location.coordinate.latitude,location.coordinate.longitude]];
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://smsserviceapi.azurewebsites.net/SendSMS?to=886905303061&msg=Emily:latitude:%f,longitude:%f&key=abcde",location.coordinate.latitude,location.coordinate.longitude]];
             NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:30];
             [request setHTTPMethod:@"POST"];
-            //[[NSURLConnection alloc] initWithRequest:request delegate:self];
+            [[NSURLConnection alloc] initWithRequest:request delegate:self];
             [self.sqlhelper removeEvent:item.ID];
 
             [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshView" object:nil];
