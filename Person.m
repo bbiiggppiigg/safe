@@ -15,7 +15,7 @@
     Person *obj = [[[self class] alloc] init];
     obj.firstName = self.firstName;
     obj.lastName = self.lastName;
-    obj.phoneNumbers = self.phoneNumbers;
+    obj.phoneNumbers = [[NSMutableArray alloc] initWithArray : self.phoneNumbers ];
     return obj;
 }
 
@@ -23,6 +23,7 @@
     self.firstName = [fname copy];
     self.lastName = [lname copy];
     self.phoneNumbers = [parray copy];
+    self.pid = -1;
     return self;
 }
 -(void) printStatus{
@@ -32,4 +33,12 @@
     NSLog(@"%@ %@",self.firstName,self.lastName);
     return [NSString stringWithFormat:@"%@ %@",self.firstName,self.lastName];
 }
+-(id) initWithPid :(int) pid withFirstName : (NSString *) fname withLastName : (NSString *) lname withPhoneNumbers : (NSMutableArray * ) parray{
+    self.firstName = [fname copy];
+    self.lastName = [lname copy];
+    self.phoneNumbers = [parray copy];
+    self.pid = pid;
+    return self;
+}
+
 @end

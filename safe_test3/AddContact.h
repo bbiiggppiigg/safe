@@ -24,5 +24,5 @@
 @end
 
 @protocol AddContactDelegate <NSObject>
--(void) childViewController: (AddContact * ) viewController updatePhoneNumbers: (NSMutableDictionary * ) phones;
+-(void) childViewController: (AddContact * ) viewController updateContacts: (NSMutableDictionary * ) contacts;
 @end

@@ -22,6 +22,6 @@
 -(EventModel *) selectEvent:(int)event_id;
 -(NSArray *) selectAllEvent;
 -(void) removeEvent:(int)event_id;
--(int) executeSQLStatement : (NSString * ) query
-;
+-(int) executeSQLStatement : (NSString * ) query;
+-(NSArray * ) selectEventById:(int) event_id;
 @end

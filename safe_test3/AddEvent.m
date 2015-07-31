@@ -13,6 +13,7 @@
 #import "SqlHelper.h"
 #import "AddContact.h"
 #import "EventList.h"
+#import "Person.h"
 
 @interface AddEvent()
 
@@ -26,8 +27,31 @@
 
 
 @implementation AddEvent
+-(id) initWithCoder:(NSCoder *)aDecoder{
+    self = [super initWithCoder:aDecoder];
+    NSLog(@"Add Event Init Decoder");
+    self.contacts = [[NSMutableDictionary alloc] init];
+    return self;
+}
 
-
+-(id) init
+{
+    NSLog(@"Add Event Init");
+    self = [super initWithNibName:@"EditView" bundle:nil];
+    
+    if(self != nil){
+        NSLog(@"nice");
+    }
+    return self;
+}
+-(id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
+    NSLog(@"Add Event Init");
+    
+    if (self = [super initWithNibName:@"MyNibName" bundle:nibBundleOrNil]) {
+        // Custom initialization
+    }
+    return nil;
+}
 -(void) viewDidLoad{
     
     [super viewDidLoad];
@@ -39,24 +63,38 @@
     
     datePicker = [[UIDatePicker alloc]init];
     datePicker.datePickerMode = UIDatePickerModeDateAndTime;
+    NSLocale *locale =  [[NSLocale alloc] initWithLocaleIdentifier:@"zh_TW"];;
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    [cal setLocale:locale];
+    [datePicker setCalendar:cal];
+    
+    
     [self.dateSelectionTextField setInputView:datePicker];
     [self.dateSelectionTextField setInputAccessoryView:toolBar];
     
-    SqlHelper *helper = [[SqlHelper alloc] init];
-    [helper createDB];
+    //SqlHelper *helper = [[SqlHelper alloc] init];
+    //[helper createDB];
     [self.addContactTable addTarget:self action:@selector(transition) forControlEvents:UIControlEventTouchDown];
     
-    self.eventTitle = @"";
-    self.eventTime = [[NSDate alloc]init];
-    self.phoneNumbers = [[NSMutableDictionary alloc]init];
-    self.updateFrequency = 0;
+    if(_event == nil){
+        NSLog(@"Initailzing new Event");
+        _event = [[EventModel alloc] init];
+        _event.title = @"";
+        _event.alarmTime = [[NSDate alloc]init];
+        _event.ID = -1;
+    }
+    
     
     [self.event_title addTarget:self action:@selector(textFieldsDidChange) forControlEvents:UIControlEventEditingDidEnd];
     [self.date addTarget:self action:@selector(textFieldsDidChange) forControlEvents:UIControlEventEditingDidEnd];
+    _event_title.text =_event.title;
+   
+    _dateSelectionTextField.text = [[self getFormatter] stringFromDate:_event.alarmTime] ;
+    if(_contacts ==nil){
+        NSLog(@"Contacts nil!!! WHY!!!!");
+        
+    }
     [self textFieldsDidChange];
-    
-    //self.delegate = [self parentViewController];
-    
 }
 
 -(void) textFieldsDidChange{
@@ -68,27 +106,33 @@
     {
          self.navigationItem.rightBarButtonItem.enabled = NO;
     }
-    if([self.phoneNumbers count] ==0){
+    if([self.contacts count] ==0){
         self.navigationItem.rightBarButtonItem.enabled = NO;
     }
 }
 -(void) transition{
     NSLog(@"Onclick");
-    AddContact * ac = [[AddContact alloc] initWithContacts:self.phoneNumbers];
+    AddContact * ac = [[AddContact alloc] initWithContacts:self.contacts];
     ac.delegate = self;
     [self.navigationController pushViewController:ac animated:YES];
 }
 
--(void) childViewController:(AddContact *)viewController updatePhoneNumbers:(NSMutableDictionary *)phones{
+-(void) childViewController:(AddContact *)viewController updateContacts:(NSMutableDictionary *)contacts{
     NSLog(@"Test Delegate");
-    self.phoneNumbers = phones;
+    self.contacts = contacts;
     [self textFieldsDidChange];
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+-(NSDateFormatter * ) getFormatter{
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    [format setDateFormat:@"yyyy-MM-dd HH:mm"];
+    [format setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC+8"]];
+    return format;
+}
+
 -(void) ShowSelectedDate{
-    NSDateFormatter * formatter = [[NSDateFormatter alloc]init];
-    [formatter setDateFormat:@"YYYY/MMM/dd hh:mm"];
-    self.dateSelectionTextField.text =[NSString stringWithFormat:@"%@", [formatter stringFromDate: datePicker.date ] ];
+    self.dateSelectionTextField.text = [[self getFormatter] stringFromDate:datePicker.date];
     [self.dateSelectionTextField resignFirstResponder];
     self.eventTime = datePicker.date;
 }
@@ -114,17 +158,26 @@
 
 
 -(IBAction) onSaveEvent:(UIBarButtonItem *)sender{
-    EventModel *event = [[EventModel alloc]init];
-    event.title=self.event_title.text;
-    NSDateFormatter *format = [[NSDateFormatter alloc] init];
-    [format setDateFormat:@"yyyy/MM/dd hh:mm"];
-    [format setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];
-    event.alarmTime = [format dateFromString:self.date.text];
+    _event.title=self.event_title.text;
+    _event.alarmTime = [[self getFormatter] dateFromString:self.date.text];
     SqlHelper *helper = [[SqlHelper alloc] init];
     [helper createDB];
-    [helper insertEvent:event withContacts:_phoneNumbers];
+    if(_event.ID == -1)
+        [helper insertEvent:_event withContacts: self.contacts];
     [self.delegate EventListViewController: self];
-    //[self.navigationController popViewControllerAnimated:YES];
 }
-
+-(void) setExistingEvent:(EventModel *) previous_event withContacts : (NSArray *) previous_contacts{
+    _event = previous_event;
+    for (Person * p in previous_contacts){
+        [_contacts setObject:p forKey: [NSNumber numberWithInt: p.pid ]];
+    }
+    
+    NSLog(@"Before Setting %@ with %@",_event_title.text,_event.title);
+    _event_title.text =_event.title;
+    NSLog(@"After Setting %@ with %@",_event_title.text,_event.title);
+    _dateSelectionTextField.text = [[self getFormatter] stringFromDate:_event.alarmTime] ;
+    
+    
+    NSLog(@"Reloading ");
+}
 @end

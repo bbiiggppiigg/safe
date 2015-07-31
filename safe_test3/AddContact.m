@@ -31,7 +31,7 @@
     
 }
 -(void) saveContacts{
-    [self.delegate childViewController:self updatePhoneNumbers:self._objects];    
+    [self.delegate childViewController:self updateContacts:self._objects];
 }
 - (void)listPeopleInAddressBook:(ABAddressBookRef)addressBook
 {
@@ -122,11 +122,11 @@
             [parray addObject: phoneNumber];
     }
     
-    Person * p  =  [[Person alloc] initWithFirstName:firstName withLastName:lastName withPhoneNumbers:parray];
+    Person * p  =  [[Person alloc] initWithPid: (int)ABRecordGetRecordID(person)  withFirstName:firstName withLastName:lastName withPhoneNumbers:parray];
+    
     ABRecordID abid = ABRecordGetRecordID(person);
     NSNumber * rec = [NSNumber numberWithInt: (int) (abid) ];
     [self._objects setObject:p forKey:rec ];
-
     self._objects2 = [NSMutableArray arrayWithArray:[self._objects allValues]];
     self._objects3 =[ NSMutableArray arrayWithArray:[self._objects allKeys]];
     [self.tableView reloadData];

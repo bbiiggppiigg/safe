@@ -8,6 +8,7 @@
 
 #import "EventList.h"
 #import "SqlHelper.h"
+#import "Person.h"
 
 @implementation EventList
 
@@ -36,7 +37,7 @@
 -(UITableViewCell *) tableView : (UITableView *) tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell * cell = [[UITableViewCell alloc]init];
 
-   EventModel * em = [self.eventList objectAtIndex:indexPath.row];
+    EventModel * em = [self.eventList objectAtIndex:indexPath.row];
     static NSString * AddContactTableIdentifier = @"AddContactItem";
     if(cell==nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:AddContactTableIdentifier];
@@ -50,5 +51,28 @@
     [self loadData];
     [self.tableView reloadData];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    EventModel * em = [self.eventList objectAtIndex:indexPath.row];
+    NSLog(@"%d",em.ID);
+    
+    SqlHelper * helper = [[SqlHelper alloc] init];
+    [helper createDB];
+    NSArray * na = [helper selectEventById:(int)em.ID];
+    NSLog(@"%lu",(unsigned long)[na count]);
+    for (Person * p  in na){
+        [p getName];
+    }
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+    AddEvent * ae = [storyboard instantiateViewControllerWithIdentifier:@"EditEvent"];
+    ae.event = em;
+    
+    for (Person * p in na){
+        [ae.contacts setObject:p forKey: [NSNumber numberWithInt: p.pid ]];
+    }
+    NSLog(@"Num of coutacts %lu",(unsigned long)[ae.contacts count]);
+    ae.delegate = self;
+    [self.navigationController pushViewController:ae animated:YES];
 }
 @end
