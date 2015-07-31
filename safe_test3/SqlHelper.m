@@ -258,7 +258,13 @@
     return returnData;
 }
 
-
+-(void) removeEventById: (int) event_id{
+    NSString *delete_event_SQL = [NSString stringWithFormat:@"DELETE FROM events WHERE id = \"%d\"", event_id];
+    [self executeSQLStatement:delete_event_SQL];
+    NSString * delete_eid_pid_SQL = [NSString stringWithFormat:@"Delete from eid_pid where eid = \"%d\"",event_id];
+    [self executeSQLStatement:delete_eid_pid_SQL];
+    
+}
 -(void) removeEvent:(int)event_id{
     const char *dbpath = [_databasePath UTF8String];
     char *errorMessage;

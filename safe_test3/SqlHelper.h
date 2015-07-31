@@ -20,6 +20,9 @@
 
 -(void) insertEvent:(EventModel *)event withContacts :(NSMutableDictionary *) contacts;
 -(void) removeEvent:(int)event_id;
+
+-(void) removeEventById:(int) event_id;
+
 -(int) executeSQLStatement : (NSString * ) query;
 -(NSArray *) selectAllEvent;
 -(NSArray * ) selectEventById:(int) event_id;

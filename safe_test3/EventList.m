@@ -75,4 +75,18 @@
     ae.delegate = self;
     [self.navigationController pushViewController:ae animated:YES];
 }
+-(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+     
+        EventModel * evm = [self.eventList objectAtIndex:indexPath.row];
+        SqlHelper *helper  = [[SqlHelper alloc] init];
+        [helper createDB];
+        [helper removeEventById:evm.ID];
+        [_eventList removeObjectAtIndex:indexPath.row];
+        
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    } else {
+        NSLog(@"Unhandled editing style! %ld", (long)editingStyle);
+    }
+}
 @end
