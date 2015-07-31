@@ -14,6 +14,7 @@
 #import "AddContact.h"
 #import "EventList.h"
 #import "Person.h"
+#import "DateHelper.h"
 
 @interface AddEvent()
 
@@ -67,8 +68,8 @@
     NSCalendar *cal = [NSCalendar currentCalendar];
     [cal setLocale:locale];
     [datePicker setCalendar:cal];
-    
-    
+    [datePicker setMinimumDate:[NSDate date]];
+
     [self.dateSelectionTextField setInputView:datePicker];
     [self.dateSelectionTextField setInputAccessoryView:toolBar];
     
@@ -80,7 +81,7 @@
         NSLog(@"Initailzing new Event");
         _event = [[EventModel alloc] init];
         _event.title = @"";
-        _event.alarmTime = [[NSDate alloc]init];
+        _event.alarmTime = [[[NSDate alloc]init] dateByAddingTimeInterval:60];
         _event.ID = -1;
     }
     
@@ -89,7 +90,7 @@
     [self.date addTarget:self action:@selector(textFieldsDidChange) forControlEvents:UIControlEventEditingDidEnd];
     _event_title.text =_event.title;
    
-    _dateSelectionTextField.text = [[self getFormatter] stringFromDate:_event.alarmTime] ;
+    _dateSelectionTextField.text = [[DateHelper getFormatter] stringFromDate:_event.alarmTime] ;
     if(_contacts ==nil){
         NSLog(@"Contacts nil!!! WHY!!!!");
         
@@ -124,15 +125,9 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(NSDateFormatter * ) getFormatter{
-    NSDateFormatter *format = [[NSDateFormatter alloc] init];
-    [format setDateFormat:@"yyyy-MM-dd HH:mm"];
-    [format setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC+8"]];
-    return format;
-}
 
 -(void) ShowSelectedDate{
-    self.dateSelectionTextField.text = [[self getFormatter] stringFromDate:datePicker.date];
+    self.dateSelectionTextField.text = [[DateHelper getFormatter] stringFromDate:datePicker.date];
     [self.dateSelectionTextField resignFirstResponder];
     _eventTime = datePicker.date;
 }
@@ -159,7 +154,9 @@
 
 -(IBAction) onSaveEvent:(UIBarButtonItem *)sender{
     _event.title=_event_title.text;
-    _event.alarmTime = [[self getFormatter] dateFromString:_date.text];
+    
+    _event.alarmTime = [[DateHelper getFormatter] dateFromString:_date.text];
+    NSLog(@"on save event %@",_date.text);
     SqlHelper *helper = [[SqlHelper alloc] init];
     [helper createDB];
     if(_event.ID == -1){

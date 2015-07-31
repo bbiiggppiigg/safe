@@ -10,6 +10,7 @@
 		102D0FFB1B69173500A8C2B9 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 102D0FFA1B69173500A8C2B9 /* libsqlite3.dylib */; };
 		109CC7381B6A147C00057EDF /* EventModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 109CC7371B6A147C00057EDF /* EventModel.m */; };
 		109CC73B1B6A1A0600057EDF /* SqlHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 109CC73A1B6A1A0600057EDF /* SqlHelper.m */; };
+		C00A905F1B6B969E0013ED66 /* DateHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C00A905E1B6B969E0013ED66 /* DateHelper.m */; };
 		C03BDCA91B676187009495C0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C03BDCA81B676187009495C0 /* main.m */; };
 		C03BDCAC1B676187009495C0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C03BDCAB1B676187009495C0 /* AppDelegate.m */; };
 		C03BDCB21B676187009495C0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C03BDCB01B676187009495C0 /* Main.storyboard */; };
@@ -40,6 +41,8 @@
 		109CC7371B6A147C00057EDF /* EventModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventModel.m; sourceTree = "<group>"; };
 		109CC7391B6A1A0600057EDF /* SqlHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SqlHelper.h; sourceTree = "<group>"; };
 		109CC73A1B6A1A0600057EDF /* SqlHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SqlHelper.m; sourceTree = "<group>"; };
+		C00A905D1B6B963B0013ED66 /* DateHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DateHelper.h; sourceTree = "<group>"; };
+		C00A905E1B6B969E0013ED66 /* DateHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateHelper.m; sourceTree = "<group>"; };
 		C03BDCA31B676187009495C0 /* safe_test3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = safe_test3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C03BDCA71B676187009495C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C03BDCA81B676187009495C0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -122,6 +125,8 @@
 				C06110281B68D547006A57D7 /* Person.h */,
 				C03BDCAA1B676187009495C0 /* AppDelegate.h */,
 				C03BDCAB1B676187009495C0 /* AppDelegate.m */,
+				C00A905D1B6B963B0013ED66 /* DateHelper.h */,
+				C00A905E1B6B969E0013ED66 /* DateHelper.m */,
 				C03BDCB01B676187009495C0 /* Main.storyboard */,
 				C061101F1B68A00E006A57D7 /* AddContact.h */,
 				C06110201B68A00E006A57D7 /* AddContact.m */,
@@ -213,6 +218,11 @@
 				TargetAttributes = {
 					C03BDCA21B676187009495C0 = {
 						CreatedOnToolsVersion = 6.4;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					C03BDCBB1B676187009495C0 = {
 						CreatedOnToolsVersion = 6.4;
@@ -272,6 +282,7 @@
 				C03BDCA91B676187009495C0 /* main.m in Sources */,
 				109CC73B1B6A1A0600057EDF /* SqlHelper.m in Sources */,
 				109CC7381B6A147C00057EDF /* EventModel.m in Sources */,
+				C00A905F1B6B969E0013ED66 /* DateHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,9 +7,15 @@
 //
 
 #import "AppDelegate.h"
+#import <CoreLocation/CoreLocation.h>
+#import "EventModel.h"
+#import "SqlHelper.h"
+#import "DateHelper.h"
+#import "Person.h"
 
-@interface AppDelegate ()
-
+@interface AppDelegate () <CLLocationManagerDelegate>
+@property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) SqlHelper *sqlhelper;
 @end
 
 @implementation AppDelegate
@@ -17,7 +23,40 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    self.sqlhelper = [[SqlHelper alloc] init];
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    [self.locationManager requestAlwaysAuthorization];
+    [self.locationManager startUpdatingLocation];
     return YES;
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
+    CLLocation *location = [locations lastObject];
+    [self.sqlhelper createDB];
+    NSArray *array = [self.sqlhelper selectAllEvent];
+    for (EventModel *item in array) {
+        NSLog(@"%@, alarm:%@",[NSDate date],item.alarmTime);
+        
+        if ([[NSDate date] compare:item.alarmTime] == NSOrderedDescending) {
+            [manager stopUpdatingLocation];
+            NSArray * arr = [self.sqlhelper selectEventByIdWithPhoneNumbers:item.ID];
+            for (Person * p in arr){
+                NSLog(@"Sending SMS to %@ %@:",p.firstName,p.lastName);
+                NSArray * phones = p.phoneNumbers;
+                for(NSString * phone in phones){
+                    NSLog(@"\tSending SMS to phone number %@",phone);
+                }
+                NSLog(@"=========================");
+            }
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://smsserviceapi.azurewebsites.net/SendSMS?to=886905303061&msg=lat:%f,lon:%f&key=abcde",location.coordinate.latitude,location.coordinate.longitude]];
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:30];
+            [request setHTTPMethod:@"POST"];
+            [[NSURLConnection alloc] initWithRequest:request delegate:self];
+            [self.sqlhelper removeEvent:item.ID];
+        }
+    }
+   
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

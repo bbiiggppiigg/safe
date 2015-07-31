@@ -29,6 +29,7 @@
         self._objects3 = [[NSMutableArray alloc] init];
     }
     
+    self.navigationItem.title = @"Contact Lists";
 }
 -(void) saveContacts{
     [self.delegate childViewController:self updateContacts:self._objects];

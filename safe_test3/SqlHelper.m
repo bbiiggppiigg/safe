@@ -8,7 +8,7 @@
 
 #import "SqlHelper.h"
 #import "Person.h"
-
+#import "DateHelper.h"
 
 
 @implementation SqlHelper
@@ -19,7 +19,7 @@
     dirPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     docsDir = dirPaths[0];
     _databasePath = [[NSString alloc] initWithString:[docsDir stringByAppendingPathComponent:@"myEvents.db"]];
-    NSLog(@"%@",_databasePath);
+    //NSLog(@"%@",_databasePath);
     NSFileManager *filemgr = [NSFileManager defaultManager];
     if([filemgr fileExistsAtPath:_databasePath] == NO){
         const char *dbpath = [_databasePath UTF8String];
@@ -57,10 +57,10 @@
         const char *sql_statement = [query UTF8String];
         sqlite3_prepare_v2(_DB, sql_statement, -1, &statement, NULL);
         if(sqlite3_step(statement) == SQLITE_DONE){
-            NSLog(@"Query Success %@",query);
+         //   NSLog(@"Query Success %@",query);
         }
         else{
-            NSLog(@"Query Failed %@",query);
+            //NSLog(@"Query Failed %@",query);
             NSLog(@"%s",sqlite3_errmsg(_DB));
             return -1;
         }
@@ -75,8 +75,8 @@
 
 -(void) insertEvent:(EventModel *)event withContacts:(NSMutableDictionary *)contacts{
 
-    NSString *insertSQL = [NSString stringWithFormat:@"INSERT INTO events (title, time) VALUES (\"%@\", \"%@\")", event.title,[ [self getFormatter] stringFromDate:event.alarmTime ] ];
-    
+    NSString *insertSQL = [NSString stringWithFormat:@"INSERT INTO events (title, time) VALUES (\"%@\", \"%@\")", event.title,[ [DateHelper getFormatter] stringFromDate:event.alarmTime ] ];
+    //NSLog(insertSQL);
     int eid = [self executeSQLStatement:insertSQL];
     
     for (id key in contacts){
@@ -96,12 +96,13 @@
     
 }
 
--(NSDateFormatter * ) getFormatter{
+/*-(NSDateFormatter * ) getFormatter{
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     [format setDateFormat:@"yyyy-MM-dd HH:mm"];
     [format setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC+8"]];
     return format;
 }
+*/
 
 -(NSArray * ) selectEventByIdWithPhoneNumbers:(int) event_id{
     sqlite3_stmt *statement;
@@ -118,12 +119,12 @@
                 sqlite3_stmt *statement2;
                 NSString *querySQL2 = [NSString stringWithFormat:@"SELECT pid, first_name , last_name FROM person natural join eid_pid WHERE eid = \"%d\" ", event_id];
                 
-                NSLog(@"%@",querySQL2);
+               // NSLog(@"%@",querySQL2);
                 const char *query_statement2 = [querySQL2 UTF8String];
                 if(sqlite3_prepare_v2(_DB, query_statement2, -1, &statement2, NULL) == SQLITE_OK){
                     while(sqlite3_step(statement2)==SQLITE_ROW){
                         int pid = sqlite3_column_int(statement2,0);
-                        NSLog(@"found person with pid %d",pid);
+                        //NSLog(@"found person with pid %d",pid);
                         NSString * first_name = [[NSString alloc] initWithUTF8String: (char *) sqlite3_column_text(statement2, 1)];
                         NSString * last_name = [[NSString alloc] initWithUTF8String: (char *) sqlite3_column_text(statement2, 2)];
                         sqlite3_stmt * statement3;
@@ -132,7 +133,7 @@
                         
                         NSMutableArray * phones = [[NSMutableArray alloc]init];
                         if(sqlite3_prepare_v2(_DB, query_statement3, -1, &statement3, NULL) == SQLITE_OK){
-                            while(sqlite3_step(statement3)==SQLITE_OK){
+                            while(sqlite3_step(statement3)==SQLITE_ROW){
                                 [phones addObject: [[NSString alloc ] initWithUTF8String :(char *)(sqlite3_column_text(statement3,0))]];
                             }
                             sqlite3_finalize(statement3);
@@ -148,7 +149,7 @@
                     NSLog(@"%s",sqlite3_errmsg(_DB));
                 }
                 
-                NSLog(@"Match %d found in database",event_id);
+                //NSLog(@"Match %d found in database",event_id);
                 
                 sqlite3_finalize(statement2);
             }else{
@@ -181,12 +182,12 @@
                 sqlite3_stmt *statement2;
                 NSString *querySQL2 = [NSString stringWithFormat:@"SELECT pid, first_name , last_name FROM person natural join eid_pid WHERE eid = \"%d\" ", event_id];
                 
-                NSLog(@"%@",querySQL2);
+                //NSLog(@"%@",querySQL2);
                 const char *query_statement2 = [querySQL2 UTF8String];
                 if(sqlite3_prepare_v2(_DB, query_statement2, -1, &statement2, NULL) == SQLITE_OK){
                     while(sqlite3_step(statement2)==SQLITE_ROW){
                         int pid = sqlite3_column_int(statement2,0);
-                        NSLog(@"found person with pid %d",pid);
+                       // NSLog(@"found person with pid %d",pid);
                         NSString * first_name = [[NSString alloc] initWithUTF8String: (char *) sqlite3_column_text(statement2, 1)];
                         NSString * last_name = [[NSString alloc] initWithUTF8String: (char *) sqlite3_column_text(statement2, 2)];
                         sqlite3_stmt * statement3;
@@ -211,7 +212,7 @@
                     NSLog(@"%s",sqlite3_errmsg(_DB));
                 }
                 
-                NSLog(@"Match %d found in database",event_id);
+                //NSLog(@"Match %d found in database",event_id);
                 
                 sqlite3_finalize(statement2);
             }else{
@@ -226,10 +227,39 @@
     return ma;
 
 }
-
+-(NSArray *) selectAllDueEvent{
+    //NSLog(@"select all events");
+    NSMutableArray *returnData = [NSMutableArray new];
+    NSString * currentTime = [[DateHelper getFormatter] stringFromDate:[NSDate date]];
+    
+    sqlite3_stmt *statement;
+    const char *dbpath = [_databasePath UTF8String];
+    if(sqlite3_open(dbpath, &_DB) == SQLITE_OK){
+        NSString *querySQL = [NSString stringWithFormat:@"SELECT id, title, time FROM events where time < \"%@\" sorder by time asc",currentTime];
+        const char *query_statement = [querySQL UTF8String];
+        
+        if(sqlite3_prepare_v2(_DB, query_statement, -1, &statement, NULL) == SQLITE_OK){
+            while (sqlite3_step(statement) == SQLITE_ROW) {
+                EventModel *event = [[EventModel alloc] init];
+                event.ID = sqlite3_column_int(statement, 0);
+                char *title = (char *) sqlite3_column_text(statement, 1);
+                char *time = (char *) sqlite3_column_text(statement, 2);
+                event.title = [[NSString alloc] initWithUTF8String:title];
+                event.alarmTime = [[DateHelper getFormatter] dateFromString:[[NSString alloc] initWithUTF8String:time]];
+                [returnData addObject:event];
+            }
+            sqlite3_finalize(statement);
+        }else{
+            NSLog(@"Failed to search the database %s",sqlite3_errmsg(_DB));
+        }
+        sqlite3_close(_DB);
+    }
+    //NSLog(@"%@", returnData);
+    return returnData;
+}
 
 -(NSArray *) selectAllEvent{
-    NSLog(@"select all events");
+    //NSLog(@"select all events");
     NSMutableArray *returnData = [NSMutableArray new];
     
     sqlite3_stmt *statement;
@@ -245,7 +275,7 @@
                 char *title = (char *) sqlite3_column_text(statement, 1);
                 char *time = (char *) sqlite3_column_text(statement, 2);
                 event.title = [[NSString alloc] initWithUTF8String:title];
-                event.alarmTime = [[self getFormatter] dateFromString:[[NSString alloc] initWithUTF8String:time]];
+                event.alarmTime = [[DateHelper getFormatter] dateFromString:[[NSString alloc] initWithUTF8String:time]];
                 [returnData addObject:event];
             }
             sqlite3_finalize(statement);
@@ -254,7 +284,7 @@
         }
         sqlite3_close(_DB);
     }
-    NSLog(@"%@", returnData);
+    //NSLog(@"%@", returnData);
     return returnData;
 }
 
@@ -285,8 +315,8 @@
 
 
 -(void) updateExistingEvent:(EventModel *)event withContacts:(NSMutableDictionary *)contacts{
-    NSLog(@"update existing events");
-    NSString *updateSQL = [NSString stringWithFormat:@"Update events set title = \"%@\", time =\"%@\" where id =\"%d\" ",event.title, [[self getFormatter] stringFromDate:event.alarmTime] ,event.ID];
+    //NSLog(@"update existing events");
+    NSString *updateSQL = [NSString stringWithFormat:@"Update events set title = \"%@\", time =\"%@\" where id =\"%d\" ",event.title, [[DateHelper getFormatter]stringFromDate:event.alarmTime] ,event.ID];
    
     [self executeSQLStatement:updateSQL];
     
@@ -306,7 +336,7 @@
         NSString * insertEidPidSQL = [NSString stringWithFormat:@"INSERT or IGNORE INTO eid_pid (eid,pid) values(\"%d\",\"%d\")",event.ID,pid];
         [self executeSQLStatement:insertEidPidSQL];
     }
-    NSLog(@"Update Succeed");
+    //NSLog(@"Update Succeed");
 }
 
 

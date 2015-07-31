@@ -17,6 +17,7 @@
     self.navigationItem.hidesBackButton = YES;
     
 }
+
 -(void) loadData{
     self.eventList = [[NSMutableArray alloc] init];
     SqlHelper * helper = [[SqlHelper alloc] init];

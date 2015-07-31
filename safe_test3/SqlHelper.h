@@ -25,6 +25,8 @@
 
 -(int) executeSQLStatement : (NSString * ) query;
 -(NSArray *) selectAllEvent;
+-(NSArray *) selectAllDueEvent;
+
 -(NSArray * ) selectEventById:(int) event_id;
 -(NSArray * ) selectEventByIdWithPhoneNumbers:(int) event_id;
 -(void) updateExistingEvent:(EventModel *) event withContacts:(NSMutableDictionary *) contacts;
