@@ -17,11 +17,12 @@
 
 
 -(void)createDB;
--(void) insertEvent:(EventModel *)event withContacts :(NSMutableDictionary *) contacts
-;
--(EventModel *) selectEvent:(int)event_id;
--(NSArray *) selectAllEvent;
+
+-(void) insertEvent:(EventModel *)event withContacts :(NSMutableDictionary *) contacts;
 -(void) removeEvent:(int)event_id;
 -(int) executeSQLStatement : (NSString * ) query;
+-(NSArray *) selectAllEvent;
 -(NSArray * ) selectEventById:(int) event_id;
+-(NSArray * ) selectEventByIdWithPhoneNumbers:(int) event_id;
+-(void) updateExistingEvent:(EventModel *) event withContacts:(NSMutableDictionary *) contacts;
 @end

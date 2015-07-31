@@ -161,7 +161,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="73" id="VJm-gv-OMm" userLabel="Table View Cell">
+                            <tableViewCell contentMode="scaleToFill" restorationIdentifier="created_events" selectionStyle="default" indentationWidth="10" reuseIdentifier="created table view cell" rowHeight="73" id="VJm-gv-OMm" userLabel="Table View Cell">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VJm-gv-OMm" id="hjc-OX-wMW">
                                     <autoresizingMask key="autoresizingMask"/>

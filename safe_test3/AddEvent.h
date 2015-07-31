@@ -27,7 +27,7 @@
 @property NSInteger * updateFrequency;
 @property (nonatomic,weak) id<AddEventDelegate> delegate;
 @property EventModel * event;
--(void) setExistingEvent:(EventModel *) previous_event withContacts : (NSArray *) previous_contacts;
+//-(void) setExistingEvent:(EventModel *) previous_event withContacts : (NSArray *) previous_contacts;
 
 
 @end

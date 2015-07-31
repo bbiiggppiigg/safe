@@ -134,7 +134,7 @@
 -(void) ShowSelectedDate{
     self.dateSelectionTextField.text = [[self getFormatter] stringFromDate:datePicker.date];
     [self.dateSelectionTextField resignFirstResponder];
-    self.eventTime = datePicker.date;
+    _eventTime = datePicker.date;
 }
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return [super tableView:tableView numberOfRowsInSection : (section)];
@@ -158,26 +158,16 @@
 
 
 -(IBAction) onSaveEvent:(UIBarButtonItem *)sender{
-    _event.title=self.event_title.text;
-    _event.alarmTime = [[self getFormatter] dateFromString:self.date.text];
+    _event.title=_event_title.text;
+    _event.alarmTime = [[self getFormatter] dateFromString:_date.text];
     SqlHelper *helper = [[SqlHelper alloc] init];
     [helper createDB];
-    if(_event.ID == -1)
-        [helper insertEvent:_event withContacts: self.contacts];
+    if(_event.ID == -1){
+        [helper insertEvent:_event withContacts: _contacts];
+    }else{
+        [helper updateExistingEvent:_event withContacts:_contacts];
+    }
     [self.delegate EventListViewController: self];
 }
--(void) setExistingEvent:(EventModel *) previous_event withContacts : (NSArray *) previous_contacts{
-    _event = previous_event;
-    for (Person * p in previous_contacts){
-        [_contacts setObject:p forKey: [NSNumber numberWithInt: p.pid ]];
-    }
-    
-    NSLog(@"Before Setting %@ with %@",_event_title.text,_event.title);
-    _event_title.text =_event.title;
-    NSLog(@"After Setting %@ with %@",_event_title.text,_event.title);
-    _dateSelectionTextField.text = [[self getFormatter] stringFromDate:_event.alarmTime] ;
-    
-    
-    NSLog(@"Reloading ");
-}
+
 @end
