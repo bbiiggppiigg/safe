@@ -15,7 +15,14 @@
 -(void) viewDidLoad{
     [self loadData];
     self.navigationItem.hidesBackButton = YES;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshView:) name:@"refreshView" object:nil];
     
+}
+-(void)refreshView:(NSNotification *) notification {
+    NSLog(@"Receive Notification");
+    [self loadData];
+    [[self tableView] reloadData];
+
 }
 
 -(void) loadData{

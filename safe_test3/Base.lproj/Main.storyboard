@@ -152,10 +152,10 @@
             </objects>
             <point key="canvasLocation" x="1826" y="391"/>
         </scene>
-        <!--Safe Gaurd-->
+        <!--EventList-->
         <scene sceneID="jBL-Ej-Tsy">
             <objects>
-                <tableViewController id="dMI-xh-Vzf" customClass="EventList" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="EventList" title="EventList" id="dMI-xh-Vzf" customClass="EventList" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="73" sectionHeaderHeight="22" sectionFooterHeight="22" id="QjQ-I9-JXq">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

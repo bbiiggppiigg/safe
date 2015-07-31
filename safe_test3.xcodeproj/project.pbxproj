@@ -11,6 +11,7 @@
 		109CC7381B6A147C00057EDF /* EventModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 109CC7371B6A147C00057EDF /* EventModel.m */; };
 		109CC73B1B6A1A0600057EDF /* SqlHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 109CC73A1B6A1A0600057EDF /* SqlHelper.m */; };
 		C00A905F1B6B969E0013ED66 /* DateHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C00A905E1B6B969E0013ED66 /* DateHelper.m */; };
+		C00A90611B6BB2500013ED66 /* Estate_agent_house_with_hearts_25.JPG in Resources */ = {isa = PBXBuildFile; fileRef = C00A90601B6BB2500013ED66 /* Estate_agent_house_with_hearts_25.JPG */; };
 		C03BDCA91B676187009495C0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C03BDCA81B676187009495C0 /* main.m */; };
 		C03BDCAC1B676187009495C0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C03BDCAB1B676187009495C0 /* AppDelegate.m */; };
 		C03BDCB21B676187009495C0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C03BDCB01B676187009495C0 /* Main.storyboard */; };
@@ -43,6 +44,7 @@
 		109CC73A1B6A1A0600057EDF /* SqlHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SqlHelper.m; sourceTree = "<group>"; };
 		C00A905D1B6B963B0013ED66 /* DateHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DateHelper.h; sourceTree = "<group>"; };
 		C00A905E1B6B969E0013ED66 /* DateHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateHelper.m; sourceTree = "<group>"; };
+		C00A90601B6BB2500013ED66 /* Estate_agent_house_with_hearts_25.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Estate_agent_house_with_hearts_25.JPG; sourceTree = "<group>"; };
 		C03BDCA31B676187009495C0 /* safe_test3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = safe_test3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C03BDCA71B676187009495C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C03BDCA81B676187009495C0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				109CC73A1B6A1A0600057EDF /* SqlHelper.m */,
 				C053A0F11B6A565100089C0C /* EventList.h */,
 				C053A0F21B6A565100089C0C /* EventList.m */,
+				C00A90601B6BB2500013ED66 /* Estate_agent_house_with_hearts_25.JPG */,
 			);
 			path = safe_test3;
 			sourceTree = "<group>";
@@ -256,6 +259,7 @@
 			files = (
 				C03BDCB21B676187009495C0 /* Main.storyboard in Resources */,
 				C03BDCB71B676187009495C0 /* LaunchScreen.xib in Resources */,
+				C00A90611B6BB2500013ED66 /* Estate_agent_house_with_hearts_25.JPG in Resources */,
 				C03BDCB41B676187009495C0 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

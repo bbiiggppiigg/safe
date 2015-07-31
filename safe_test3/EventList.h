@@ -11,5 +11,5 @@
 
 @interface EventList : UITableViewController<AddEventDelegate>
 @property NSMutableArray * eventList;
-
+-(void) loadData;
 @end

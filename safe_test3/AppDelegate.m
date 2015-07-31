@@ -8,15 +8,18 @@
 
 #import "AppDelegate.h"
 #import <CoreLocation/CoreLocation.h>
+#import "Person.h"
 #import "EventModel.h"
 #import "SqlHelper.h"
+#import "EventList.h"
 #import "DateHelper.h"
-#import "Person.h"
+
 
 @interface AppDelegate () <CLLocationManagerDelegate>
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) SqlHelper *sqlhelper;
 @end
+
 
 @implementation AppDelegate
 
@@ -28,6 +31,7 @@
     self.locationManager.delegate = self;
     [self.locationManager requestAlwaysAuthorization];
     [self.locationManager startUpdatingLocation];
+    
     return YES;
 }
 
@@ -52,11 +56,14 @@
             NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://smsserviceapi.azurewebsites.net/SendSMS?to=886905303061&msg=lat:%f,lon:%f&key=abcde",location.coordinate.latitude,location.coordinate.longitude]];
             NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:30];
             [request setHTTPMethod:@"POST"];
-            [[NSURLConnection alloc] initWithRequest:request delegate:self];
+            //[[NSURLConnection alloc] initWithRequest:request delegate:self];
             [self.sqlhelper removeEvent:item.ID];
+
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshView" object:nil];
         }
     }
-   
+    
+    //[self.window.rootViewController loadView];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
